@@ -1,0 +1,2 @@
+"""AeroSOC Navigator application package."""
+

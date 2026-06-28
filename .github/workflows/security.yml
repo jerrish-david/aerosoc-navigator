@@ -1,0 +1,28 @@
+name: security
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+
+  image-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -f infra/docker/Dockerfile -t aerosoc-navigator:scan .
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: aerosoc-navigator:scan
+          format: table
+          exit-code: "0"
+
