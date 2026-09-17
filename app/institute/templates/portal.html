@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container dashboard">
+  <div class="page-intro">
+    <p class="eyebrow">STUDENT PORTAL <span class="intro-divider">/</span> {{ student.student_id }}</p>
+    <h1>Your <span class="serif">courses.</span></h1>
+    <p class="quiet">Welcome back to Ruach Institute.</p>
+  </div>
+  <div class="section-rule"><h2 class="eyebrow">YOUR LEARNING</h2><span class="eyebrow">RUACH INSTITUTE</span></div>
+  <div class="course-grid">
+    {% for course in courses %}
+      {% if course.status == 'active' %}
+        <a class="course-card active-card" href="/institute/{{ course.slug }}">
+          <div class="card-top"><span class="eyebrow">COURSE {{ '%02d'|format(loop.index) }}</span><span class="course-status">Available</span></div>
+          <h2>{{ course.title }}</h2>
+          <div class="card-bottom"><span>{{ course.total_weeks }} weeks</span><span>Enter course <span aria-hidden="true">↗</span></span></div>
+        </a>
+      {% else %}
+        <article class="course-card coming-card" aria-label="Future course, coming soon">
+          <div class="card-top"><span class="eyebrow">NEXT CHAPTER</span><span class="course-status">COMING SOON</span></div>
+          <h2>FUTURE<br>COURSE</h2>
+          <div class="card-bottom"><span>Coming soon</span><span aria-hidden="true">—</span></div>
+        </article>
+      {% endif %}
+    {% endfor %}
+    {% if not courses|selectattr('status', 'equalto', 'active')|list %}
+      <article class="course-card unavailable-card"><p class="eyebrow">COURSE ACCESS</p><h2>Architecture<br>of the Mind</h2><p class="quiet">No active enrollment. Please contact the institute for access.</p></article>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

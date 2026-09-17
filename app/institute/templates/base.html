@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="color-scheme" content="dark">
+  <title>{% block title %}Student Portal{% endblock %} — Ruach Institute</title>
+  <link rel="icon" href="/institute/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/institute/static/portal.css">
+  <script src="/institute/static/portal.js" defer></script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="{% if student or signed_in %}/institute/portal{% else %}/institute{% endif %}" aria-label="Ruach Institute home">
+      <span class="wordmark-name">RUACH</span><span class="wordmark-subtitle">INSTITUTE</span>
+    </a>
+    <nav aria-label="Student navigation">
+      {% if student or signed_in %}
+        {% block navigation %}{% endblock %}
+        <form action="/institute/auth/logout" method="post" data-loading="Signing out…">
+          <button class="text-button" type="submit">Sign out</button>
+        </form>
+      {% else %}<span class="eyebrow header-label">Private student access</span>{% endif %}
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">{% block content %}{% endblock %}</main>
+  <footer class="site-footer"><span>RUACH INSTITUTE</span><span>Private student portal</span></footer>
+  <div class="navigation-status" role="status" aria-live="polite"></div>
+</body>
+</html>

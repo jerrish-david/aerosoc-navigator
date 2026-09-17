@@ -1,0 +1,54 @@
+{% macro resource(title, content, class_name='') %}
+<section class="resource {{ class_name }}" aria-label="{{ title }}">
+  <h4 class="eyebrow">{{ title }}</h4>
+  <div class="resource-content"><p class="placeholder">{{ content }}</p></div>
+</section>
+{% endmacro %}
+
+{% macro audio_player(lesson, media_enabled, media_placeholders) %}
+<section class="resource audio-resource" aria-label="Audio">
+  <div class="resource-heading"><h4 class="eyebrow">AUDIO</h4><span class="fine-print">{% if media_enabled %}{% if media_placeholders %}Placeholder test audio{% else %}Lesson recording{% endif %}{% else %}Recording forthcoming{% endif %}</span></div>
+  <div class="audio-player" data-audio-player>
+    <audio {% if media_enabled %}data-src="/institute/media/{{ lesson.id }}/audio"{% endif %} preload="none" aria-label="{{ lesson.title }} recording"></audio>
+    <button type="button" class="play-button" aria-label="Play recording" {% if not media_enabled %}disabled{% endif %} data-play><span aria-hidden="true">▶</span></button>
+    <div class="audio-timeline">
+      <div class="audio-title">{{ lesson.title }}</div>
+      <label class="sr-only" for="seek-{{ lesson.id }}">Recording position</label>
+      <input id="seek-{{ lesson.id }}" type="range" min="0" max="7200" value="0" step="1" disabled data-seek>
+      <div class="audio-times"><span data-current>0:00</span><span data-duration>{% if media_enabled and media_placeholders %}0:03{% else %}~ 2:00:00{% endif %}</span></div>
+    </div>
+    <div class="audio-volume"><label for="volume-{{ lesson.id }}">Volume</label><input id="volume-{{ lesson.id }}" type="range" min="0" max="1" value="1" step="0.05" disabled data-volume></div>
+    <p class="sr-only" role="status" data-audio-status>{% if media_enabled %}Press play to load the recording.{% else %}Audio is not yet available.{% endif %}</p>
+  </div>
+</section>
+{% endmacro %}
+
+{% macro week_section(week, media_enabled=false, media_placeholders=true) %}
+{% set words = {1:'ONE', 2:'TWO', 3:'THREE', 4:'FOUR', 5:'FIVE'} %}
+<section class="week-section{% if not week.lesson %} locked-week{% endif %}" aria-labelledby="week-{{ week.number }}">
+  <div class="week-heading">
+    <span class="week-number" aria-hidden="true">{{ '%02d'|format(week.number) }}</span>
+    <div class="week-intro">
+      <div class="week-label"><h2 class="eyebrow" id="week-{{ week.number }}">WEEK {{ words.get(week.number, week.number) }}</h2>{% if not week.lesson %}<span class="locked-label"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true"><path d="M3 6V4a3 3 0 0 1 6 0v2M1 6h10v7H1z" stroke="currentColor"/></svg>LOCKED</span>{% else %}<span class="fine-print">AVAILABLE NOW</span>{% endif %}</div>
+      {% if week.lesson %}
+        <h3>{{ week.lesson.title }}</h3>
+        <div class="week-description"><p class="placeholder">{{ week.lesson.description }}</p></div>
+      {% else %}
+        <div class="masked-content" aria-hidden="true"><span class="mask-title"></span><span class="mask-line"></span><span class="mask-line short"></span></div>
+        <p class="sr-only">This week is locked. Content is not available.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% if week.lesson %}
+    <div class="week-resources">
+      <section class="resource notes-resource" aria-label="NOTES">
+        <h4 class="eyebrow">NOTES</h4>
+        <div class="resource-content"><p class="placeholder">{{ week.lesson.notes }}</p>
+        {% if media_enabled %}<p><a href="/institute/media/{{ week.lesson.id }}/notes" target="_blank" rel="noopener">{% if media_placeholders %}Open placeholder notes (PDF){% else %}Open notes (PDF){% endif %}</a></p>{% endif %}</div>
+      </section>
+      {{ audio_player(week.lesson, media_enabled, media_placeholders) }}
+      {{ resource('REFLECTION QUESTIONS', week.lesson.reflection_questions) }}
+    </div>
+  {% endif %}
+</section>
+{% endmacro %}

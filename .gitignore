@@ -14,4 +14,4 @@ build/
 .env
 .env.local
 node_modules/
-
+*.egg-info/

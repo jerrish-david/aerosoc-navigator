@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "components.html" import week_section %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block body_class %}course-page{% endblock %}
+{% block navigation %}<a class="text-link back-link" href="/institute/portal"><span aria-hidden="true">←</span> My courses</a>{% endblock %}
+{% block content %}
+<section class="course-hero" aria-labelledby="course-title">
+  <p class="eyebrow hero-kicker">RUACH INSTITUTE <span>/</span> A COURSE IN {{ course.total_weeks }} WEEKS</p>
+  <h1 id="course-title">{{ course.title }}</h1>
+  <div class="hero-bottom"><span class="eyebrow">{{ '%02d'|format(course.total_weeks) }} WEEKS</span><span class="eyebrow">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></span></div>
+</section>
+<div class="container course-content">
+  <section class="overview" aria-labelledby="overview-title"><h2 class="eyebrow" id="overview-title">OVERVIEW</h2><div class="overview-copy"><p class="placeholder">PLACEHOLDER</p></div></section>
+  {% for week in weeks %}{{ week_section(week, media_enabled, media_placeholders) }}{% endfor %}
+</div>
+{% endblock %}

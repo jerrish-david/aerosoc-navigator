@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="container error-page" aria-labelledby="error-title">
+  <p class="eyebrow">RUACH INSTITUTE / STUDENT ACCESS</p>
+  <h1 id="error-title">{{ title }}</h1>
+  <p class="quiet" role="alert">{{ detail }}</p>
+  {% if signed_in %}<a class="text-link" href="/institute/portal">Return to your portal <span aria-hidden="true">↗</span></a>{% else %}<a class="text-link" href="/institute">Return to sign in <span aria-hidden="true">↗</span></a>{% endif %}
+</section>
+{% endblock %}

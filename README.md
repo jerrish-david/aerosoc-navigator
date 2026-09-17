@@ -55,3 +55,8 @@ This scaffold is intentionally half-implemented:
 6. Require human approval for high-risk actions.
 7. Write immutable audit events for every major step.
 
+## Ruach Institute portal
+
+An isolated student portal is mounted at `/institute`. It uses Supabase Magic Links,
+server-rendered pages, approved-student enrollment checks, and database RLS.
+See [the setup and deployment guide](docs/ruach-institute.md) before enabling it.

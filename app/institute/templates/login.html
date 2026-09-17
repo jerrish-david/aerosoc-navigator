@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body_class %}login-page{% endblock %}
+{% block content %}
+<div class="login-layout container">
+  <section class="login-heading" aria-labelledby="login-title">
+    <p class="eyebrow"><span class="index">01</span> STUDENT ACCESS</p>
+    <h1 id="login-title">Student<br><span class="serif">Portal.</span></h1>
+    <p class="quiet">Your space to study.</p>
+  </section>
+  <section class="login-panel" aria-labelledby="form-title">
+    {% if sent %}
+      <div role="status" aria-live="polite">
+        <p class="eyebrow">NEXT STEP</p>
+        <h2 id="form-title">Check your inbox.</h2>
+        <p>If your email is registered, a sign-in link is on its way.</p>
+        <p class="quiet">Open the link in this browser to enter your portal. You can also check your spam folder.</p>
+      </div>
+      <a class="text-link" href="/institute">Return to sign in <span aria-hidden="true">↗</span></a>
+    {% else %}
+      <p class="eyebrow">WELCOME TO RUACH INSTITUTE</p>
+      <h2 id="form-title">Enter your portal.</h2>
+      <p class="form-intro">Use your registered email address.<br>We’ll send you a link to sign in.</p>
+      <form action="/institute/auth/login" method="post" data-loading="Sending your link…">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" value="{{ email }}" {% if invalid %}aria-invalid="true"{% endif %} aria-describedby="email-help{% if message %} form-message{% endif %}">
+        {% if message %}<p id="form-message" class="form-error" role="alert">{{ message[0] }}. {{ message[1] }}</p>{% endif %}
+        <button class="primary-button" type="submit"><span>Continue</span><span aria-hidden="true">↗</span></button>
+        <p id="email-help" class="fine-print">Access is reserved for registered students.</p>
+      </form>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
